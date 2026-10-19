@@ -49,11 +49,11 @@ const URL_PARAMS = new URLSearchParams(window.location.search);
 const LOW_QUALITY = URL_PARAMS.has('low');
 const NO_SSAO = URL_PARAMS.has('nosao');
 
-// 移动端检测与画质档位（自动降级：低像素比 / 小阴影贴图 / 少植被粒子 / 关 SSAO）
+// 移动端检测与画质档位（自动降级：像素比上限 2 保清晰 / 小阴影贴图 / 少植被粒子 / 关 SSAO）
 const IS_MOBILE =
   /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
 const Q = IS_MOBILE
-  ? { pixelRatio: 1, shadow: 1024, grass: [320, 160, 70], wild: 50, flowers: 36, trees: 12, rain: 900, dust: 80, fireflies: 20 }
+  ? { pixelRatio: Math.min(window.devicePixelRatio || 1, 2), shadow: 1024, grass: [320, 160, 70], wild: 50, flowers: 36, trees: 12, rain: 900, dust: 80, fireflies: 20 }
   : { pixelRatio: Math.min(window.devicePixelRatio, 1.6), shadow: 2048, grass: [700, 350, 150], wild: 90, flowers: 46, trees: 16, rain: 1800, dust: 150, fireflies: 30 };
 
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
